@@ -13,7 +13,7 @@ class DBClient {
     this.client.connect().then(() => {
       this.db = this.client.db(this.dbName);
     }).catch((err) => {
-      console.error(err.message);
+      console.error('Could not connect to mongodb', err.message);
     });
   }
 
