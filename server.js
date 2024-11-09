@@ -1,7 +1,7 @@
-import cors from 'cors';
-import express from 'express';
+import cors from "cors";
+import express from "express";
 //import dotenv from 'dotenv';
-import router from './Backend/routes/index';
+import router from "./Backend/routes/index";
 //import blogRoutes from './Backend/routes/blogRoutes';
 
 //dotenv.config();
@@ -15,3 +15,4 @@ app.use(router);
 //app.use(blogRoutes);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
+export default app;

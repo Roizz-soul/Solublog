@@ -15,17 +15,17 @@ router.get("/connect", AuthController.getConnect);
 router.get("/disconnect", AuthController.getDisconnect);
 
 // upload post and get posts
-router.post("/files/:id?", FilesController.postblog);
-router.get("/files/:id", FilesController.getPost);
-router.get("/files", FilesController.getAllPosts);
+router.post("/blogs/:id?", FilesController.postblog);
+router.get("/blogs/:id", FilesController.getPost);
+router.get("/blogs", FilesController.getAllPosts);
 
 // rate post and search
-router.post("/files/:id/rate", FilesController.ratePost);
-router.get("/files/s/search", FilesController.searchPosts);
+router.post("/blogs/:id/rate", FilesController.ratePost);
+router.get("/blogs/s/search", FilesController.searchPosts);
 
 // update and delete
-router.put("/files/:id", FilesController.updatePost);
-router.delete("/files/:id", FilesController.deletePost);
+router.put("/blogs/:id", FilesController.updatePost);
+router.delete("/blogs/:id", FilesController.deletePost);
 
 // user
 router.post("/register", UsersController.postNew);
@@ -33,6 +33,7 @@ router.get("/users/me", UsersController.getMe);
 router.get("/users", UsersController.getAllUsers);
 router.get("/users/:id", UsersController.getUser);
 router.put("/users/me/:id", UsersController.updateUser);
+router.delete("/users/:id", UsersController.deleteUser);
 
 // Password resetting
 router.post("/request-password-reset", UsersController.requestPasswordReset);

@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import crypto from "crypto";
+import nodemailer from "nodemailer";
 import path from "path";
 import { ObjectId } from "mongodb";
 import dbClient from "../../Utils/db";
@@ -65,12 +66,10 @@ class UsersController {
       id: newUser.insertedId,
       email,
     };
-    res
-      .status(201)
-      .send(
-        json,
-        "User created. Please check your email to confirm your account."
-      );
+    res.status(201).send({
+      json,
+      message: "User created. Please check your email to confirm your account.",
+    });
   }
 
   /**
@@ -144,8 +143,8 @@ class UsersController {
     const transporter = nodemailer.createTransport({
       service: "gmail", // or your email service
       auth: {
-        user: "your-email@gmail.com",
-        pass: "your-email-password",
+        user: "oabraham096@gmail.com",
+        pass: "miracle12",
       },
     });
 
@@ -211,8 +210,8 @@ class UsersController {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "your-email@gmail.com",
-        pass: "your-email-password",
+        user: "oabraham096@gmail.com",
+        pass: "miracle12",
       },
     });
 
@@ -239,6 +238,10 @@ class UsersController {
 
     if (!user) {
       return res.status(400).send({ error: "Invalid token" });
+    }
+
+    if (!token) {
+      return res.status(400).send({ error: "Missing token" });
     }
 
     await users.updateOne(
@@ -271,7 +274,17 @@ class UsersController {
     const users = dbClient.db.collection("users");
     try {
       const allUsers = await users
-        .find({}, { projection: { password: 0 } })
+        .find(
+          {},
+          {
+            projection: {
+              password: 0,
+              confirmationToken: 0,
+              resetToken: 0,
+              resetTokenExpiration: 0,
+            },
+          }
+        )
         .toArray();
       res.status(200).json(allUsers);
     } catch (error) {
@@ -439,6 +452,52 @@ class UsersController {
       res.status(200).json({ message: "Profile updated successfully!" });
     } catch (error) {
       res.status(500).json({ error: "Failed to update Profile." });
+    }
+  }
+
+  /**
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} response message
+   * @description Deletes a user based on user ID
+   */
+  static async deleteUser(req, res) {
+    const authToken = req.header("X-Token") || null;
+    if (!authToken) {
+      res.status(402).send({
+        error: "Unauthorized",
+      });
+      return;
+    }
+    const token = `auth_${authToken}`;
+    const user = await redisClient.get(token);
+    if (!user) {
+      res.status(401).send({
+        error: "Unauthorized",
+      });
+      return;
+    }
+    const userId = req.params.id;
+
+    // Check if userId is provided and valid
+    if (!ObjectId.isValid(userId)) {
+      res.status(400).send({ error: "Invalid user ID" });
+      return;
+    }
+
+    try {
+      const users = dbClient.db.collection("users");
+      const result = await users.deleteOne({ _id: new ObjectId(userId) });
+
+      if (result.deletedCount === 0) {
+        res.status(404).send({ error: "User not found" });
+      } else {
+        res.status(200).send({ message: "User deleted successfully" });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .send({ error: "An error occurred while deleting the user" });
     }
   }
 }

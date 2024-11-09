@@ -42,7 +42,6 @@ class FilesController {
       });
       return;
     }
-    //const acceptedTypes = ['folder', 'file', 'image'];
     const {
       title = null,
       content,
