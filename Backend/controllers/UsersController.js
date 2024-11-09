@@ -260,17 +260,6 @@ class UsersController {
    * @returns {Object} - Express response object
    */
   static async getAllUsers(req, res) {
-    // const user = await FilesController.retrieveUserBasedOnToken(req);
-    // if (!user) {
-    //   res.status(401).send({
-    //     error: 'Unauthorized',
-    //   });
-    //   return;
-    // }
-    /*const {
-      parentId,
-      page,
-    } = req.query;*/
     const users = dbClient.db.collection("users");
     try {
       const allUsers = await users
@@ -343,13 +332,6 @@ class UsersController {
    */
   static async getUser(req, res) {
     const { id } = req.params;
-    // const user = await FilesController.retrieveUserBasedOnToken(req);
-    // if (!user) {
-    //   res.status(401).send({
-    //     error: 'Unauthorized',
-    //   });
-    //   return;
-    // }
 
     const users = dbClient.db.collection("users");
     try {

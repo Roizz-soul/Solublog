@@ -17,7 +17,7 @@ const fileQueue = new Queue("fileQueue", {
 
 /**
  * @class FilesController
- * @description Controller for files related operations
+ * @description Controller for blog related operations
  * @exports FilesController
  */
 class FilesController {
@@ -201,13 +201,6 @@ class FilesController {
    */
   static async getPost(req, res) {
     const { id } = req.params;
-    // const user = await FilesController.retrieveUserBasedOnToken(req);
-    // if (!user) {
-    //   res.status(401).send({
-    //     error: 'Unauthorized',
-    //   });
-    //   return;
-    // }
 
     const blogposts = dbClient.db.collection("files");
     try {
@@ -232,17 +225,6 @@ class FilesController {
    * @returns {Object} - Express response object
    */
   static async getAllPosts(req, res) {
-    // const user = await FilesController.retrieveUserBasedOnToken(req);
-    // if (!user) {
-    //   res.status(401).send({
-    //     error: 'Unauthorized',
-    //   });
-    //   return;
-    // }
-    /*const {
-      parentId,
-      page,
-    } = req.query;*/
     const blogposts = dbClient.db.collection("files");
     try {
       const posts = await blogposts.find({}).toArray();
@@ -331,6 +313,13 @@ class FilesController {
     }
   }
 
+  /**
+   * @method deletePost
+   * @description delete blogPosts
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   * @returns {Object} - Express response object
+   */
   static async deletePost(req, res) {
     const { id } = req.params;
     const user = await FilesController.retrieveUserBasedOnToken(req);
@@ -366,6 +355,13 @@ class FilesController {
     }
   }
 
+  /**
+   * @method ratePost
+   * @description rate questions or solutions
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   * @returns {Object} - Express response object
+   */
   static async ratePost(req, res) {
     const { id } = req.params;
     const { rating } = req.body;
@@ -422,6 +418,13 @@ class FilesController {
     }
   }
 
+  /**
+   * @method searchPost
+   * @description search posts
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   * @returns {Object} - Express response object
+   */
   static async searchPosts(req, res) {
     const { query } = req.query; // Get the search query from the URL
     const blogposts = dbClient.db.collection("files");
