@@ -477,7 +477,7 @@ class UsersController {
       });
       return;
     }
-    const userId = req.params.id;
+    const userId = user._id;
 
     // Check if userId is provided and valid
     if (!ObjectId.isValid(userId)) {

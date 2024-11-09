@@ -307,7 +307,6 @@ describe("User API", () => {
 
 describe("User Deletion API", () => {
   let token = "";
-  let userId = 0;
 
   it("should login with valid credentials", (done) => {
     chai
@@ -325,25 +324,11 @@ describe("User Deletion API", () => {
       });
   });
 
-  it("should retrieve the current user with a valid token", (done) => {
-    chai
-      .request(app)
-      .get("/users/me")
-      .set("X-Token", token)
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        expect(res.body).to.have.property("id");
-        expect(res.body).to.have.property("email");
-        userId = res.body.id;
-        done();
-      });
-  });
-
-  describe("DELETE /users/:id", () => {
+  describe("DELETE /users", () => {
     it("should delete a user with a valid ID", (done) => {
       chai
         .request(app)
-        .delete(`/users/${userId}`)
+        .delete("/users")
         .set("X-Token", token)
         .end((err, res) => {
           expect(res).to.have.status(200);
@@ -354,26 +339,14 @@ describe("User Deletion API", () => {
         });
     });
 
-    it("should return 404 for a non-existent user ID", (done) => {
+    it("should not delete a user with a nvalid token", (done) => {
       chai
         .request(app)
-        .delete("/users/64d40bcf2b4a3c1e8897f123") // Use a random ObjectId format that doesn’t exist
-        .set("X-Token", token)
+        .delete("/users")
+        .set("X-Token", "invalid_token")
         .end((err, res) => {
-          expect(res).to.have.status(404);
-          expect(res.body).to.have.property("error").eql("User not found");
-          done();
-        });
-    });
-
-    it("should return 400 for an invalid user ID format", (done) => {
-      chai
-        .request(app)
-        .delete("/users/invalid-id-format")
-        .set("X-Token", token)
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.property("error").eql("Invalid user ID");
+          expect(res).to.have.status(401);
+          expect(res.body).to.have.property("error").eql("Unauthorized");
           done();
         });
     });

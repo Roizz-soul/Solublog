@@ -19,9 +19,10 @@ router.post("/blogs/:id?", FilesController.postblog);
 router.get("/blogs/:id", FilesController.getPost);
 router.get("/blogs", FilesController.getAllPosts);
 
-// rate post and search
+// rate post and search and notifications
 router.post("/blogs/:id/rate", FilesController.ratePost);
 router.get("/blogs/s/search", FilesController.searchPosts);
+router.get("/notifications", FilesController.getNotifications);
 
 // update and delete
 router.put("/blogs/:id", FilesController.updatePost);
@@ -33,7 +34,7 @@ router.get("/users/me", UsersController.getMe);
 router.get("/users", UsersController.getAllUsers);
 router.get("/users/:id", UsersController.getUser);
 router.put("/users/me/:id", UsersController.updateUser);
-router.delete("/users/:id", UsersController.deleteUser);
+router.delete("/users", UsersController.deleteUser);
 
 // Password resetting
 router.post("/request-password-reset", UsersController.requestPasswordReset);

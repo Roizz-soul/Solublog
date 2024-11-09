@@ -21,6 +21,33 @@ const fileQueue = new Queue("fileQueue", {
  * @exports FilesController
  */
 class FilesController {
+  // to create a notification
+  static async createNotification(
+    userId,
+    message,
+    type,
+    relatedEntityId,
+    isImportant = false
+  ) {
+    try {
+      const notificationsCollection = dbClient.db.collection("notifications");
+
+      const notification = {
+        userId,
+        message,
+        type,
+        read: false, // Newly created notification is unread
+        createdAt: new Date(),
+        relatedEntityId,
+        isImportant,
+      };
+
+      await notificationsCollection.insertOne(notification);
+    } catch (error) {
+      console.error("Error creating notification:", error);
+    }
+  }
+
   /**
    * @method postblog
    * @description Uploads a blogpost
@@ -81,6 +108,7 @@ class FilesController {
         ratings: [],
         averageRating: 0.0,
       });
+      const postId = post.insertedId;
       if (id) {
         await blogposts.updateOne(
           { _id: id },
@@ -89,8 +117,14 @@ class FilesController {
             $inc: { replyCount: 1 },
           }
         );
+        const message = `Your post has received a new comment!`;
+        await FilesController.createNotification(
+          user._id,
+          message,
+          "comment",
+          postId
+        );
       }
-      const postId = post.insertedId;
       res.status(201).json({
         postId,
         post: post.ops,
@@ -123,6 +157,39 @@ class FilesController {
       return "NC";
     }
     return userDoc;
+  }
+
+  /**
+   * @method getNotifications
+   * @description retrieve notifications  for user
+   * @param {Object} req - Express request object
+   * @param {Object} res - Express response object
+   * @returns {Object} - Express response object
+   */
+  static async getNotifications(req, res) {
+    //const { id } = req.params;
+    const user = await FilesController.retrieveUserBasedOnToken(req);
+    if (!user) {
+      res.status(401).send({
+        error: "Unauthorized",
+      });
+      return;
+    }
+
+    try {
+      const notificationsCollection = dbClient.db.collection("notifications");
+
+      // Fetch notifications for the logged-in user, sorted by creation time
+      const notifications = await notificationsCollection
+        .find({ userId: user._id })
+        .sort({ createdAt: -1 }) //.limit(10) // Limit to 10 notifications
+        .toArray();
+
+      res.status(200).json(notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 
   /**

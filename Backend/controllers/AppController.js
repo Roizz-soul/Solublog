@@ -1,5 +1,5 @@
-import redisClient from '../../Utils/redis';
-import dbClient from '../../Utils/db';
+import redisClient from "../../Utils/redis";
+import dbClient from "../../Utils/db";
 
 class AppController {
   static getStatus(_req, res) {
@@ -14,6 +14,7 @@ class AppController {
     const json = {
       users: await dbClient.nbUsers(),
       files: await dbClient.nbFiles(),
+      notifications: await dbClient.nbNotifications(),
     };
     res.status(200).send(json);
   }
