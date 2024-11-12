@@ -95,14 +95,21 @@ class UsersController {
       return;
     }
     const users = dbClient.db.collection("users");
-    const userDoc = await users.findOne({
-      _id: ObjectId(user),
-    });
+    const userDoc = await users.findOne(
+      {
+        _id: ObjectId(user),
+      },
+      {
+        projection: {
+          password: 0,
+          confirmationToken: 0,
+          resetToken: 0,
+          resetTokenExpiration: 0,
+        },
+      }
+    );
     if (userDoc) {
-      res.status(200).send({
-        id: user,
-        email: userDoc.email,
-      });
+      res.status(200).send(userDoc);
     } else {
       res.status(401).send({
         error: "Unauthorized",
@@ -325,7 +332,7 @@ class UsersController {
 
   /**
    * @method getUser
-   * @description retrieve posts based on id
+   * @description retrieve user based on id
    * @param {Object} req - Express request object
    * @param {Object} res - Express response object
    * @returns {Object} - Express response object
@@ -375,11 +382,12 @@ class UsersController {
       return;
     }
     const { id } = req.params;
+    console.log(req.body, req.file);
     const {
       full_name,
       user_name,
       bio,
-      //profile_picture,
+      profile_picture,
       location,
       occupation,
       /* favourite topics */ interests,
@@ -390,22 +398,25 @@ class UsersController {
 
     const users = dbClient.db.collection("users");
     // Validate and handle the file data
-    const file = req.files?.profilePicture;
+    const file = req.file;
+    console.log(full_name, profile_picture);
     if (!file) {
+      console.log("No picture");
       return res.status(400).json({ error: "No file uploaded" });
     }
-    if (!file.mimetype.startsWith("image/")) {
+    if (!file.mimetype.endsWith("jpeg")) {
+      console.log("Not a picture");
       return res
         .status(400)
         .json({ error: "Invalid file type. Only images are allowed" });
     }
 
-    // Set up file path and save the file
-    const fileName = `${Date.now()}_${id}_${file.name}`;
-    const filePath = path.join("uploads", fileName);
+    // // Set up file path and save the file
+    // const fileName = `${Date.now()}_${id}_${file.name}`;
+    // const filePath = path.join("uploads", fileName);
 
-    // Write file to the specified path
-    fs.writeFileSync(filePath, file.data);
+    // // Write file to the specified path
+    // fs.writeFileSync(filePath, file.data);
 
     try {
       const updated = await users.updateOne(
@@ -415,7 +426,7 @@ class UsersController {
             full_name,
             user_name,
             bio,
-            profile_picture: filePath,
+            profile_picture: req.file.path,
             location,
             occupation,
             interests,

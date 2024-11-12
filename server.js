@@ -12,6 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(router);
+app.use("/uploads", express.static("./uploads/"));
+
 //app.use(blogRoutes);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

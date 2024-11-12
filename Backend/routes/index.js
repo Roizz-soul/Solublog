@@ -3,6 +3,19 @@ import AppController from "../controllers/AppController";
 import UsersController from "../controllers/UsersController";
 import AuthController from "../controllers/AuthController";
 import FilesController from "../controllers/FilesController";
+import multer from "multer";
+import path from "path";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads"); // Ensure 'uploads' folder exists
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const router = Router();
 
@@ -33,7 +46,11 @@ router.post("/register", UsersController.postNew);
 router.get("/users/me", UsersController.getMe);
 router.get("/users", UsersController.getAllUsers);
 router.get("/users/:id", UsersController.getUser);
-router.put("/users/me/:id", UsersController.updateUser);
+router.post(
+  "/users/me/:id",
+  upload.single("profile_picture"),
+  UsersController.updateUser
+);
 router.delete("/users", UsersController.deleteUser);
 
 // Password resetting
