@@ -27,6 +27,7 @@ class FilesController {
     message,
     type,
     relatedEntityId,
+    user_name,
     isImportant = false
   ) {
     try {
@@ -34,6 +35,7 @@ class FilesController {
 
       const notification = {
         userId,
+        user_name,
         message,
         type,
         read: false, // Newly created notification is unread
@@ -99,6 +101,7 @@ class FilesController {
         title,
         content,
         userId: user._id.toString(), // assuming user info is available after auth
+        user_name: user.full_name,
         createdAt: new Date(),
         updatedAt: new Date(),
         parentId: id,
@@ -122,7 +125,8 @@ class FilesController {
           user._id,
           message,
           "comment",
-          postId
+          postId,
+          user.full_name
         );
       }
       res.status(201).json({

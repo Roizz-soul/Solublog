@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -34,12 +35,16 @@ const NotificationsPage = () => {
         <div className="notifications-list">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
-              <div key={notification.id} className="notification-item">
-                <p>{notification.message}</p>
-                <small>
-                  {new Date(notification.createdAt).toLocaleString()}
-                </small>
-              </div>
+              <Link to={"/thread/" + notification.relatedEntityId}>
+                <div key={notification.id} className="notification-item">
+                  <p>{notification.message}</p>
+                  <small>
+                    {new Date(notification.createdAt).toLocaleString()}
+                    <br></br>
+                    By {notification.user_name}
+                  </small>
+                </div>
+              </Link>
             ))
           ) : (
             <p>No notifications to display.</p>

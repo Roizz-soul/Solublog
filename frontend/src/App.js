@@ -9,15 +9,16 @@ import CreateBlogPage from "./pages/CreateBlogPage";
 import ReplyThreadPage from "./pages/ReplyThreadPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import SearchPage from "./pages/SearchPage";
+import UsersPage from "./pages/UsersPage";
 import { AuthContext } from "./context/AuthContext";
 import Header from "./components/Header";
 
 function App() {
-  const { user, userToken, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <Router>
-      {userToken && <Header user={user} logout={logout} />}
+      {<Header user={user} logout={logout} />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -28,6 +29,7 @@ function App() {
         <Route path="/thread/:postId" element={<ReplyThreadPage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/users" element={<UsersPage />} />
       </Routes>
     </Router>
   );

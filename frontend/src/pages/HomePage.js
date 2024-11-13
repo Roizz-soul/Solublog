@@ -68,9 +68,6 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* Global Header for navigation */}
-      {!user && <Header user={user} onLogout={logout} />}{" "}
-      {/* Only render header if not logged in */}
       <div className="homepage">
         {user ? (
           <div className="welcome-message">
@@ -106,22 +103,26 @@ const HomePage = () => {
                     <span>Rating: {post.averageRating || 0} ★</span>
                   </div>
                   <div className="post-actions">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedPost(post);
-                      }}
-                    >
-                      Rate
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleReplyClick(post._id);
-                      }}
-                    >
-                      Reply
-                    </button>
+                    {user && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPost(post);
+                          }}
+                        >
+                          Rate
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleReplyClick(post._id);
+                          }}
+                        >
+                          Reply
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))

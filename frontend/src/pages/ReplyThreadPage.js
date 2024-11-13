@@ -124,24 +124,28 @@ const ReplyThreadPage = () => {
               <span>Rating: {reply.averageRating || 0} ★</span>
             </div>
             <div className="post-actions">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedPost(reply);
-                }}
-              >
-                Rate
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleReplyClick(reply._id);
-                }}
-              >
-                Reply
-              </button>
+              {user && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPost(reply);
+                    }}
+                  >
+                    Rate
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleReplyClick(reply._id);
+                    }}
+                  >
+                    Reply
+                  </button>
+                </>
+              )}
             </div>
-            <small>Posted by {reply.userName}</small>
+            <small>Posted by {reply.user_name}</small>
           </div>
         ))}
         <div className="new-reply">
