@@ -20,6 +20,10 @@ const LoginPage = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    navigate("/forgot-password"); // Redirect to forgot password page
+  };
+
   return (
     <div className="login-container">
       <h2>Login to Solublog</h2>
@@ -41,6 +45,9 @@ const LoginPage = () => {
         />
         <button type="submit">Login</button>
       </form>
+      <div>
+        <button onClick={handleForgotPassword}>Forgot Password?</button>
+      </div>
     </div>
   );
 };

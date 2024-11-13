@@ -12,6 +12,7 @@ import SearchPage from "./pages/SearchPage";
 import UsersPage from "./pages/UsersPage";
 import { AuthContext } from "./context/AuthContext";
 import Header from "./components/Header";
+import ForgotPasswordPage from "./pages/ForgetPasswordPage";
 
 function App() {
   const { user, logout } = useContext(AuthContext);
@@ -30,6 +31,7 @@ function App() {
         <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/users" element={<UsersPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Routes>
     </Router>
   );

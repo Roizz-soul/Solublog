@@ -1,7 +1,6 @@
 import { createHash } from "crypto";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
-import path from "path";
 import { ObjectId } from "mongodb";
 import dbClient from "../../Utils/db";
 import redisClient from "../../Utils/redis";
@@ -150,12 +149,18 @@ class UsersController {
     const transporter = nodemailer.createTransport({
       service: "gmail", // or your email service
       auth: {
-        user: "oabraham096@gmail.com",
-        pass: "miracle12",
+        type: "OAuth2",
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_PASSWORD,
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        accessToken: process.env.OAUTH_ACCESS_TOKEN,
       },
     });
 
     await transporter.sendMail({
+      from: process.env.MAIL_USERNAME,
       to: email,
       subject: "Solublog user Password Reset",
       html: `<p>Solublog user Password Reset</p>
@@ -217,12 +222,18 @@ class UsersController {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "oabraham096@gmail.com",
-        pass: "miracle12",
+        type: "OAuth2",
+        user: process.env.MAIL_USERNAME,
+        pass: process.env.MAIL_PASSWORD,
+        clientId: process.env.OAUTH_CLIENTID,
+        clientSecret: process.env.OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        accessToken: process.env.OAUTH_ACCESS_TOKEN,
       },
     });
 
     await transporter.sendMail({
+      from: process.env.MAIL_USERNAME,
       to: email,
       subject: "Confirm Your Email",
       html: `<Solublog confirmation mail</p>

@@ -947,3 +947,47 @@ h2 {
 .user-card p strong {
   font-weight: 600;
 }
+.forgot-password-page,
+.login-page {
+  width: 350px;
+  margin: 80px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.forgot-password-page h2,
+.login-page h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+input {
+  width: 92%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+.success {
+  color: green;
+  font-size: 14px;
+}
